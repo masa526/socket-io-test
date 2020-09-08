@@ -1,8 +1,8 @@
-var app = require('http').app.createServer(handler),
+var app = require('http').createServer(handler),
 io = require('socket.io').listen(app),
 fs = require('fs');
 
-app.listen(1337);
+app.listen(8888);
 
 function handler(req, res) {
     fs.readFile(__dirname + '/index.html', function(err, data) {
@@ -15,3 +15,9 @@ function handler(req, res) {
         res.end();
     });
 }
+
+io.sockets.on('connection', function(socket) {
+    socket.on('emit_from_client', function(data) {
+        console.log(data);
+    });
+});
