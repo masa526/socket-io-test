@@ -19,8 +19,10 @@ function handler(req, res) {
 io.sockets.on('connection', function(socket) {
     socket.on('emit_from_client', function(data) {
         console.log(data);
+        // 接続しているソケット
         // socket.emit('emit_from_server', 'hello from server:' + data);
-        // 接続しているソケット以外全部
+        // 接続しているソケット以外
+        // socket.broadcast.emit('emit_from_server', 'hello from server:' + data);
+        // ソケット全部
         io.sockets.emit('emit_from_server', '[' + socket.id + ']' + data);
-    });
 });
