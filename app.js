@@ -17,11 +17,13 @@ function handler(req, res) {
         res.end();
     });
 }
-
-io.sockets.on('connection', function(socket) {
+var chat = io.of('/chat').on('connection', function(socket) {
     socket.on('emit_from_client', function(data) {
         socket.join(data.room);
         socket.emit('emit_from_server', 'your are in' + data.room);
         socket.broadcast.to(data.room).emit('emit_from_server',data.msg);
     });
+});
+var news = io.of('/news').on('connection', function(socket) {
+    socket.emit('emit_from_server', 'today:' + new Date());
 });

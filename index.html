@@ -14,22 +14,27 @@
         <button type="submit">Send</button>
     </form>
     <ul id="logs"></ul>
+    <div id="news"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         $(function () {
-            let socket = io.connect();
+            let chat = io.connect('http://localhost:8888/chat'),
+                news = io.connect('http://localhost:8888/news');
             $("#myForm").on("submit", (e) => {
                 e.preventDefault();
-                socket.json.emit('emit_from_client', {
+                chat.json.emit('emit_from_client', {
                     msg: $("#message").val(),
                     room: $("#rooms").val(),
                 });
                 $("#message").val("").focus();
             });
 
-            socket.on('emit_from_server', (data) => {
+            chat.on('emit_from_server', (data) => {
                 $("#logs").append($('<li>').text(data));
+            });
+            news.on('emit_from_server', (data) => {
+                $("#news").text(data);
             });
         })
     </script>
